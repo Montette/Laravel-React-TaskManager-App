@@ -35,9 +35,10 @@ class ProjectController extends Controller
 
       public function show($id)
       {
-        $project = Project::with(['tasks' => function ($query) {
-          $query->where('is_completed', false);
-        }])->find($id);
+        // $project = Project::with(['tasks' => function ($query) {
+        //   $query->where('is_completed', false);
+        // }])->find($id);
+        $project = Project::with(['tasks'])->find($id);
 
         return $project->toJson();
       }

@@ -64585,6 +64585,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+
+function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
@@ -64618,6 +64628,7 @@ function (_Component) {
     _this.state = {
       project: {},
       tasks: [],
+      completedTasks: [],
       title: '',
       errors: []
     };
@@ -64637,7 +64648,12 @@ function (_Component) {
       axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/projects/".concat(projectId)).then(function (response) {
         _this2.setState({
           project: response.data,
-          tasks: response.data.tasks
+          tasks: response.data.tasks.filter(function (task) {
+            return !task.is_completed;
+          }),
+          completedTasks: response.data.tasks.filter(function (task) {
+            return task.is_completed;
+          })
         });
       });
     }
@@ -64678,15 +64694,19 @@ function (_Component) {
     }
   }, {
     key: "handleMarkTaskAsCompleted",
-    value: function handleMarkTaskAsCompleted(taskId) {
+    value: function handleMarkTaskAsCompleted(completedTask) {
       var _this4 = this;
 
-      axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/tasks/".concat(taskId)).then(function (response) {
+      var completedTasks = _toConsumableArray(this.state.completedTasks);
+
+      completedTasks.push(completedTask);
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.put("/api/tasks/".concat(completedTask.id)).then(function (response) {
         _this4.setState(function (prevState) {
           return {
             tasks: prevState.tasks.filter(function (task) {
-              return task.id !== taskId;
-            })
+              return task.id !== completedTask.id;
+            }),
+            completedTasks: completedTasks
           };
         });
       });
@@ -64714,13 +64734,28 @@ function (_Component) {
       });
     }
   }, {
+    key: "deleteTask",
+    value: function deleteTask(taskToDelete) {
+      var _this5 = this;
+
+      var kindOftasks = taskToDelete.is_completed ? 'completedTasks' : 'tasks';
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.delete("/api/tasks/".concat(taskToDelete.id)).then(function (response) {
+        _this5.setState(function (prevState) {
+          return _defineProperty({}, kindOftasks, prevState[kindOftasks].filter(function (task) {
+            return task.id !== taskToDelete.id;
+          }));
+        });
+      });
+    }
+  }, {
     key: "render",
     value: function render() {
-      var _this5 = this;
+      var _this6 = this;
 
       var _this$state = this.state,
           project = _this$state.project,
-          tasks = _this$state.tasks;
+          tasks = _this$state.tasks,
+          completedTasks = _this$state.completedTasks;
       return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
         className: "container py-4"
       }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
@@ -64757,10 +64792,23 @@ function (_Component) {
         return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", {
           className: "list-group-item d-flex justify-content-between align-items-center",
           key: task.id
+        }, task.title, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
+          className: "btn btn-primary btn-sm",
+          onClick: _this6.handleMarkTaskAsCompleted.bind(_this6, task)
+        }, "Mark as completed"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
+          className: "btn btn-primary btn-sm",
+          onClick: _this6.deleteTask.bind(_this6, task)
+        }, "Delete")));
+      })), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("hr", null), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("p", null, "Completed tasks"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("ul", {
+        className: "list-group mt-3"
+      }, completedTasks.map(function (task) {
+        return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", {
+          className: "list-group-item d-flex justify-content-between align-items-center",
+          key: task.id
         }, task.title, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
           className: "btn btn-primary btn-sm",
-          onClick: _this5.handleMarkTaskAsCompleted.bind(_this5, task.id)
-        }, "Mark as completed"));
+          onClick: _this6.deleteTask.bind(_this6, task)
+        }, "Delete"));
       })))))));
     }
   }]);

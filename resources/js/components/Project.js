@@ -7,6 +7,7 @@ class SingleProject extends Component {
     this.state = {
       project: {},
       tasks: [],
+      completedTasks: [],
       title: '',
       errors: []
     }
@@ -22,7 +23,8 @@ class SingleProject extends Component {
     axios.get(`/api/projects/${projectId}`).then(response => {
       this.setState({
         project: response.data,
-        tasks: response.data.tasks
+        tasks: response.data.tasks.filter(task => !task.is_completed),
+        completedTasks: response.data.tasks.filter(task => task.is_completed),
       })
     })
   }
@@ -59,12 +61,15 @@ class SingleProject extends Component {
       })
   }
 
-  handleMarkTaskAsCompleted (taskId) {
-    axios.put(`/api/tasks/${taskId}`).then(response => {
+  handleMarkTaskAsCompleted (completedTask) {
+    const completedTasks = [...this.state.completedTasks];
+    completedTasks.push(completedTask);
+    axios.put(`/api/tasks/${completedTask.id}`).then(response => {
       this.setState(prevState => ({
         tasks: prevState.tasks.filter(task => {
-          return task.id !== taskId
-        })
+          return task.id !== completedTask.id
+        }),
+         completedTasks
       }))
     })
   }
@@ -90,8 +95,21 @@ class SingleProject extends Component {
       .then(response => history.push('/'))
   }
 
+  deleteTask (taskToDelete) {
+      let kindOftasks = taskToDelete.is_completed ? 'completedTasks' : 'tasks';
+      axios.delete(`/api/tasks/${taskToDelete.id}`)
+      .then(response => {
+        this.setState(prevState => ({
+            [kindOftasks]: prevState[kindOftasks].filter(task => {
+              return task.id !== taskToDelete.id
+            }),
+            
+          }))
+      })
+  }
+
   render () {
-    const { project, tasks } = this.state
+    const { project, tasks, completedTasks } = this.state
 
     return (
       <div className='container py-4'>
@@ -130,13 +148,39 @@ class SingleProject extends Component {
                       key={task.id}
                     >
                       {task.title}
-
+                    <div>
                       <button
                             className='btn btn-primary btn-sm'
-                            onClick={this.handleMarkTaskAsCompleted.bind(this,task.id)}
+                            onClick={this.handleMarkTaskAsCompleted.bind(this,task)}
                             >
                             Mark as completed
                         </button>
+                        <button
+                            className='btn btn-primary btn-sm'
+                            onClick={this.deleteTask.bind(this, task)}
+                            >
+                            Delete
+                        </button>
+                        </div>
+                    </li>
+                  ))}
+                </ul>
+                <hr />
+                <p>Completed tasks</p>
+                <ul className='list-group mt-3'>
+                  {completedTasks.map(task => (
+                    <li
+                      className='list-group-item d-flex justify-content-between align-items-center'
+                      key={task.id}
+                    >
+                      {task.title}
+                      <button
+                            className='btn btn-primary btn-sm'
+                            onClick={this.deleteTask.bind(this, task)}
+                            >
+                            Delete
+                        </button>
+
                     </li>
                   ))}
                 </ul>
