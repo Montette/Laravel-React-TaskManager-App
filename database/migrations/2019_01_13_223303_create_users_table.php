@@ -17,11 +17,9 @@ class CreateUsersTable extends Migration
             $table->increments('id');
             $table->string('name');
             $table->string('email');
-            $table->string('password');
-            $table->rememberToken();
+            $table->string('position');
+            $table->unsignedInteger('task_id');
             $table->timestamps();
-
-            $table->index([DB::raw('email(191)')]);
         });
     }
 
