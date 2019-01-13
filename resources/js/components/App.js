@@ -6,6 +6,7 @@
     import ProjectsList from './ProjectsList'
     import NewProject from './NewProject';
     import Project from './Project';
+    import UsersList from './UsersList'
 
     class App extends Component {
       render () {
@@ -16,7 +17,9 @@
               <Switch>
                 <Route exact path='/' component={ProjectsList} />
                 <Route path='/create' component={NewProject} />
+                <Route path='/users' component={UsersList} />
                 <Route path='/:id' component={Project} />
+                
  
               </Switch>
             </div>

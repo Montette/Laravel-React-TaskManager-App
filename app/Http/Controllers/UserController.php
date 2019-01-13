@@ -8,8 +8,7 @@ class UserController extends Controller
 {
     public function index()
     {
-      $users = User::all()
-                          ->orderBy('created_at', 'desc')
+      $users = User::orderBy('created_at', 'desc')
                           ->withCount(['tasks' => function ($query) {
                             $query->where('is_completed', false);
                           }])
