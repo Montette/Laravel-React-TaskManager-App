@@ -65020,10 +65020,20 @@ function (_Component) {
         className: "list-group list-group-flush"
       }, users.map(function (user) {
         return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", {
-          className: "list-group-item list-group-item-action d-flex justify-content-between"
+          className: "list-group-item list-group-item-action"
+        }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+          className: "d-flex justify-content-between"
         }, user.name, ", ", user.position, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("span", {
           className: "badge badge-primary badge-pill"
-        }, user.tasks_count));
+        }, user.tasks_count)), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("ul", {
+          className: "list-group list-group-flush"
+        }, "Active tasks:", user.tasks.filter(function (task) {
+          return !task.is_completed;
+        }).map(function (task) {
+          return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", {
+            className: "list-group-item list-group-item-action"
+          }, task.title);
+        })));
       })))))));
     }
   }]);

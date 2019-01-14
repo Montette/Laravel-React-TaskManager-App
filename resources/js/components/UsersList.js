@@ -31,13 +31,26 @@ class UsersList extends Component {
               
                 <ul className='list-group list-group-flush'>
                   {users.map(user => (
-                 <li className="list-group-item list-group-item-action d-flex justify-content-between">
+                 <li className="list-group-item list-group-item-action">
+                  <div className="d-flex justify-content-between">
                       {user.name}, {user.position}
                       <span className='badge badge-primary badge-pill'>
                         {user.tasks_count}
                       </span>
+                      </div>
+
+                      <ul className='list-group list-group-flush'>
+                         Active tasks:
+                         {user.tasks.filter(task => !task.is_completed).map(task => (
+                           <li className="list-group-item list-group-item-action">
+                             {task.title}
+                           </li>
+                         ))}
+                      </ul>
+                 
                     
                     </li>
+                   
                   ))}
 
                 </ul>

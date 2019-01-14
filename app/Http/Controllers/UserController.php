@@ -12,6 +12,7 @@ class UserController extends Controller
                           ->withCount(['tasks' => function ($query) {
                             $query->where('is_completed', false);
                           }])
+                          ->with(['tasks'])
                           ->get();
 
       return $users->toJson();
