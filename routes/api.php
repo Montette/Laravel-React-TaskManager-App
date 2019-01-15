@@ -22,3 +22,4 @@ Route::post('tasks', 'TaskController@store');
 Route::put('tasks/{task}', 'TaskController@markAsCompleted');
 Route::delete('tasks/{task}', 'TaskController@delete');
 Route::get('users', 'UserController@index');
+Route::get('users/{id}', 'UserController@show');

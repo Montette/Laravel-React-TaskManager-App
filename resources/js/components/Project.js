@@ -6,6 +6,12 @@ class SingleProject extends Component {
     super(props)
     this.state = {
       project: {},
+    //   user: {
+    //       name: '',
+    //       id: ''
+    //   },
+      user_id: 0,
+      userName: '',
       tasks: [],
       completedTasks: [],
       title: '',
@@ -30,9 +36,20 @@ class SingleProject extends Component {
   }
 
   handleFieldChange (event) {
+      console.log(event.target.value);
     this.setState({
-      title: event.target.value
-    })
+      [event.target.name]: event.target.value,
+      
+    });
+    if(event.target.tagName.toLowerCase() === 'select') {
+        this.setState({
+            user_id: event.target.options[event.target.selectedIndex].id
+        });
+        console.log(event.target);
+        console.log(event.target.options);
+        console.log(event.target.selectedIndex)
+    }
+    console.log(this.state.user_id);
   }
 
   handleAddNewTask (event) {
@@ -40,14 +57,17 @@ class SingleProject extends Component {
 
     const task = {
       title: this.state.title,
-      project_id: this.state.project.id
+      project_id: this.state.project.id,
+      user_id: Number(this.state.user_id)
     }
 
     axios.post('/api/tasks', task)
       .then(response => {
         // clear form input
         this.setState({
-          title: ''
+          title: '',
+          user_id: '',
+          userName: ''
         })
         // add new task to list of tasks
         this.setState(prevState => ({
@@ -135,11 +155,27 @@ class SingleProject extends Component {
                         value={this.state.title}
                         onChange={this.handleFieldChange}
                         />
-                        <div className='input-group-append'>
-                        <button className='btn btn-primary'>Add</button>
-                        </div>
+                     
+                       
                         {this.renderErrorFor('title')}
                     </div>
+                    
+                    <div class="form-group">
+                        <label for="userName">Assign user</label>
+                        <select class="form-control" id="userName"  name="userName"
+                        onChange={ this.handleFieldChange} value={this.state.userName}>
+                       {this.props.users.map(user => (
+                           <option id={user.id}>{user.name}</option>
+                       ))}
+                        </select>
+                    </div>     
+                    
+
+
+                     <div className='input-group-append'>
+                        <button className='btn btn-primary'>Add</button>
+                        </div>
+
                     </form>
                 <ul className='list-group mt-3'>
                   {tasks.map(task => (

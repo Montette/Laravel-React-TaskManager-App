@@ -18,4 +18,14 @@ class UserController extends Controller
       return $users->toJson();
     }
 
+    public function show($id)
+    {
+      // $project = Project::with(['tasks' => function ($query) {
+      //   $query->where('is_completed', false);
+      // }])->find($id);
+      $user = User::with(['tasks'])->find($id);
+
+      return $user->toJson();
+    }
+
 }

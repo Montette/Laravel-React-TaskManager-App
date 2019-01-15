@@ -64254,7 +64254,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _NewProject__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./NewProject */ "./resources/js/components/NewProject.js");
 /* harmony import */ var _Project__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./Project */ "./resources/js/components/Project.js");
 /* harmony import */ var _UsersList__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./UsersList */ "./resources/js/components/UsersList.js");
+/* harmony import */ var _User__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./User */ "./resources/js/components/User.js");
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -64281,33 +64284,70 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 
 
+
 var App =
 /*#__PURE__*/
 function (_Component) {
   _inherits(App, _Component);
 
   function App() {
+    var _this;
+
     _classCallCheck(this, App);
 
-    return _possibleConstructorReturn(this, _getPrototypeOf(App).apply(this, arguments));
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(App).call(this));
+    _this.state = {
+      users: []
+    };
+    return _this;
   }
 
   _createClass(App, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      var _this2 = this;
+
+      axios.get('/api/users').then(function (response) {
+        console.log(response.data);
+
+        _this2.setState({
+          users: response.data
+        });
+      });
+    }
+  }, {
     key: "render",
     value: function render() {
+      var _this3 = this;
+
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_2__["BrowserRouter"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Header__WEBPACK_IMPORTED_MODULE_3__["default"], null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_2__["Switch"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_2__["Route"], {
         exact: true,
         path: "/",
         component: _ProjectsList__WEBPACK_IMPORTED_MODULE_4__["default"]
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_2__["Route"], {
         path: "/create",
-        component: _NewProject__WEBPACK_IMPORTED_MODULE_5__["default"]
+        component: function component() {
+          return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_NewProject__WEBPACK_IMPORTED_MODULE_5__["default"], {
+            users: _this3.state.users
+          });
+        }
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_2__["Route"], {
         path: "/users",
-        component: _UsersList__WEBPACK_IMPORTED_MODULE_7__["default"]
+        component: function component() {
+          return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_UsersList__WEBPACK_IMPORTED_MODULE_7__["default"], {
+            users: _this3.state.users
+          });
+        }
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_2__["Route"], {
+        path: "/users/:id",
+        component: _User__WEBPACK_IMPORTED_MODULE_8__["default"]
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_2__["Route"], {
         path: "/:id",
-        component: _Project__WEBPACK_IMPORTED_MODULE_6__["default"]
+        component: function component(props) {
+          return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Project__WEBPACK_IMPORTED_MODULE_6__["default"], _extends({}, props, {
+            users: _this3.state.users
+          }));
+        }
       }))));
     }
   }]);
@@ -64593,8 +64633,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
 
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
@@ -64602,6 +64640,8 @@ function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread n
 function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
 
 function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -64635,6 +64675,12 @@ function (_Component) {
     _this = _possibleConstructorReturn(this, _getPrototypeOf(SingleProject).call(this, props));
     _this.state = {
       project: {},
+      //   user: {
+      //       name: '',
+      //       id: ''
+      //   },
+      user_id: 0,
+      userName: '',
       tasks: [],
       completedTasks: [],
       title: '',
@@ -64668,9 +64714,19 @@ function (_Component) {
   }, {
     key: "handleFieldChange",
     value: function handleFieldChange(event) {
-      this.setState({
-        title: event.target.value
-      });
+      console.log(event.target.value);
+      this.setState(_defineProperty({}, event.target.name, event.target.value));
+
+      if (event.target.tagName.toLowerCase() === 'select') {
+        this.setState({
+          user_id: event.target.options[event.target.selectedIndex].id
+        });
+        console.log(event.target);
+        console.log(event.target.options);
+        console.log(event.target.selectedIndex);
+      }
+
+      console.log(this.state.user_id);
     }
   }, {
     key: "handleAddNewTask",
@@ -64680,12 +64736,15 @@ function (_Component) {
       event.preventDefault();
       var task = {
         title: this.state.title,
-        project_id: this.state.project.id
+        project_id: this.state.project.id,
+        user_id: Number(this.state.user_id)
       };
       axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('/api/tasks', task).then(function (response) {
         // clear form input
         _this3.setState({
-          title: ''
+          title: '',
+          user_id: '',
+          userName: ''
         }); // add new task to list of tasks
 
 
@@ -64790,11 +64849,25 @@ function (_Component) {
         placeholder: "Task title",
         value: this.state.title,
         onChange: this.handleFieldChange
-      }), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      }), this.renderErrorFor('title')), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+        class: "form-group"
+      }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("label", {
+        for: "userName"
+      }, "Assign user"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("select", {
+        class: "form-control",
+        id: "userName",
+        name: "userName",
+        onChange: this.handleFieldChange,
+        value: this.state.userName
+      }, this.props.users.map(function (user) {
+        return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("option", {
+          id: user.id
+        }, user.name);
+      }))), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
         className: "input-group-append"
       }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
         className: "btn btn-primary"
-      }, "Add")), this.renderErrorFor('title'))), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("ul", {
+      }, "Add"))), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("ul", {
         className: "list-group mt-3"
       }, tasks.map(function (task) {
         return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", {
@@ -64934,6 +65007,175 @@ function (_Component) {
 
 /***/ }),
 
+/***/ "./resources/js/components/User.js":
+/*!*****************************************!*\
+  !*** ./resources/js/components/User.js ***!
+  \*****************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/es/index.js");
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+
+
+
+
+var User =
+/*#__PURE__*/
+function (_Component) {
+  _inherits(User, _Component);
+
+  function User(props) {
+    var _this;
+
+    _classCallCheck(this, User);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(User).call(this, props));
+    _this.state = {
+      user: {},
+      tasks: [],
+      completedTasks: [],
+      errors: [] // this.handleFieldChange = this.handleFieldChange.bind(this)
+      // this.handleAddNewTask = this.handleAddNewTask.bind(this)
+
+    };
+    _this.hasErrorFor = _this.hasErrorFor.bind(_assertThisInitialized(_assertThisInitialized(_this)));
+    _this.renderErrorFor = _this.renderErrorFor.bind(_assertThisInitialized(_assertThisInitialized(_this)));
+    return _this;
+  } //   componentDidMount () {
+  //     const userId = this.props.match.params.id
+  //     axios.get(`/api/users/${userId}`).then(response => {
+  //       this.setState({
+  //         user: response.data,
+  //         // tasks: response.data.tasks.filter(task => !task.is_completed),
+  //         // completedTasks: response.data.tasks.filter(task => task.is_completed),
+  //       })
+  //     })
+  //   }
+  //   handleFieldChange (event) {
+  //     this.setState({
+  //       title: event.target.value
+  //     })
+  //   }
+  //   handleAddNewTask (event) {
+  //     event.preventDefault()
+  //     const task = {
+  //       title: this.state.title,
+  //       project_id: this.state.project.id
+  //     }
+  //     axios.post('/api/tasks', task)
+  //       .then(response => {
+  //         // clear form input
+  //         this.setState({
+  //           title: ''
+  //         })
+  //         // add new task to list of tasks
+  //         this.setState(prevState => ({
+  //           tasks: prevState.tasks.concat(response.data)
+  //         }))
+  //       })
+  //       .catch(error => {
+  //         this.setState({
+  //           errors: error.response.data.errors
+  //         })
+  //       })
+  //   }
+  //   handleMarkTaskAsCompleted (completedTask) {
+  //     const completedTasks = [...this.state.completedTasks];
+  //     completedTasks.push(completedTask);
+  //     axios.put(`/api/tasks/${completedTask.id}`).then(response => {
+  //       this.setState(prevState => ({
+  //         tasks: prevState.tasks.filter(task => {
+  //           return task.id !== completedTask.id
+  //         }),
+  //          completedTasks
+  //       }))
+  //     })
+  //   }
+
+
+  _createClass(User, [{
+    key: "hasErrorFor",
+    value: function hasErrorFor(field) {
+      return !!this.state.errors[field];
+    }
+  }, {
+    key: "renderErrorFor",
+    value: function renderErrorFor(field) {
+      if (this.hasErrorFor(field)) {
+        return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("span", {
+          className: "invalid-feedback"
+        }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("strong", null, this.state.errors[field][0]));
+      }
+    } //   handleMarkProjectAsCompleted () {
+    //     const { history } = this.props
+    //     axios.put(`/api/projects/${this.state.project.id}`)
+    //       .then(response => history.push('/'))
+    //   }
+    //   deleteTask (taskToDelete) {
+    //       let kindOftasks = taskToDelete.is_completed ? 'completedTasks' : 'tasks';
+    //       axios.delete(`/api/tasks/${taskToDelete.id}`)
+    //       .then(response => {
+    //         this.setState(prevState => ({
+    //             [kindOftasks]: prevState[kindOftasks].filter(task => {
+    //               return task.id !== taskToDelete.id
+    //             }),
+    //           }))
+    //       })
+    //   }
+
+  }, {
+    key: "render",
+    value: function render() {
+      var user = this.props.data;
+      return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", {
+        className: "list-group-item list-group-item-action"
+      }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+        className: "d-flex justify-content-between"
+      }, user.name, ", ", user.position, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("span", {
+        className: "badge badge-primary badge-pill"
+      }, user.tasks_count)), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("ul", {
+        className: "list-group list-group-flush"
+      }, "Active tasks:", user.tasks.filter(function (task) {
+        return !task.is_completed;
+      }).map(function (task) {
+        return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", {
+          className: "list-group-item list-group-item-action"
+        }, task.title);
+      })));
+    }
+  }]);
+
+  return User;
+}(react__WEBPACK_IMPORTED_MODULE_1__["Component"]);
+
+/* harmony default export */ __webpack_exports__["default"] = (User);
+
+/***/ }),
+
 /***/ "./resources/js/components/UsersList.js":
 /*!**********************************************!*\
   !*** ./resources/js/components/UsersList.js ***!
@@ -64948,6 +65190,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/es/index.js");
+/* harmony import */ var _User__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./User */ "./resources/js/components/User.js");
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -64970,40 +65213,37 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 
 
+
+
 var UsersList =
 /*#__PURE__*/
 function (_Component) {
   _inherits(UsersList, _Component);
 
   function UsersList() {
-    var _this;
-
     _classCallCheck(this, UsersList);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(UsersList).call(this));
-    _this.state = {
-      users: []
-    };
-    return _this;
+    return _possibleConstructorReturn(this, _getPrototypeOf(UsersList).apply(this, arguments));
   }
 
   _createClass(UsersList, [{
-    key: "componentDidMount",
-    value: function componentDidMount() {
-      var _this2 = this;
-
-      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('/api/users').then(function (response) {
-        console.log(response.data);
-
-        _this2.setState({
-          users: response.data
-        });
-      });
-    }
-  }, {
     key: "render",
+    // constructor () {
+    //   super()
+    //   this.state = {
+    //     users: []
+    //   }
+    // }
+    // componentDidMount () {
+    //   axios.get('/api/users').then(response => {
+    //       console.log(response.data)
+    //     this.setState({
+    //       users: response.data
+    //     })
+    //   })
+    // }
     value: function render() {
-      var users = this.state.users;
+      var users = this.props.users;
       return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
         className: "container py-4"
       }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
@@ -65019,22 +65259,10 @@ function (_Component) {
       }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("ul", {
         className: "list-group list-group-flush"
       }, users.map(function (user) {
-        return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", {
-          className: "list-group-item list-group-item-action"
-        }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
-          className: "d-flex justify-content-between"
-        }, user.name, ", ", user.position, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("span", {
-          className: "badge badge-primary badge-pill"
-        }, user.tasks_count)), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("ul", {
-          className: "list-group list-group-flush"
-        }, "Active tasks:", user.tasks.filter(function (task) {
-          return !task.is_completed;
-        }).map(function (task) {
-          return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", {
-            className: "list-group-item list-group-item-action"
-          }, task.title);
-        })));
-      })))))));
+        return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_User__WEBPACK_IMPORTED_MODULE_3__["default"], {
+          data: user
+        });
+      })), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("hr", null))))));
     }
   }]);
 

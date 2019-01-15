@@ -13,6 +13,7 @@ class TaskController extends Controller
         $task = Task::create([
           'title' => $validatedData['title'],
           'project_id' => $request->project_id,
+          'user_id' => $request->user_id
         ]);
 
         return $task->toJson();
